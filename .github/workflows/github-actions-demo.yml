@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v4
       - run: pip install build
       - run: python -m build
-  example_matrix:
+  Test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
