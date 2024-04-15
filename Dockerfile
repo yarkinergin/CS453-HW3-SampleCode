@@ -1,8 +1,17 @@
-# Container image that runs your code
-FROM alpine:3.10
+# Use an official Python runtime as a parent image
+FROM python:3.9
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
-COPY entrypoint.sh /entrypoint.sh
+# Set the working directory in the container
+WORKDIR /app
 
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/entrypoint.sh"]
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
+CMD ["python", "dictionary.py"]
