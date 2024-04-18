@@ -1,6 +1,13 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - test
+  pull_request:
+    branches:
+      - main
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -10,17 +17,23 @@ jobs:
       - run: pip install build
       - run: python -m build
   Test:
+    needs: Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [3.8, 3.9, 3.10]
+        version: ["3.8", "3.9", "3.10"]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{matrix.version}}
       - run: pip install -r requirements.txt
       - run: pip install pytest
       - run: pytest
   push_to_registry:
+    needs: Test
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
